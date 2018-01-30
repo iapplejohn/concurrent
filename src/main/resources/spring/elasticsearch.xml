@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:elasticsearch="http://www.springframework.org/schema/data/elasticsearch"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+	    http://www.springframework.org/schema/data/elasticsearch
+		http://www.springframework.org/schema/data/elasticsearch/spring-elasticsearch-1.0.xsd">
+
+	<bean class="com.ycdd.server.search.impl.client.TransportClientFactoryBean">
+		<property name="clusterNodes" value="${env.es.new.clusterNodes}"/>
+		<property name="clusterName" value="${env.es.new.clusterName}"/>
+	</bean>
+
+	<context:component-scan base-package="com.jemmy.es"/>
+
+	<elasticsearch:transport-client id="client"  cluster-nodes="${env.es.new.clusterNodes}"
+		cluster-name="${env.es.new.clusterName}" client-transport-sniff="true" client-transport-ping-timeout="5s"
+		client-transport-nodes-sampler-interval="5s" client-transport-ignore-cluster-name="false" />
+
+	<bean name="elasticsearchTemplate"
+		  class="org.springframework.data.elasticsearch.core.ElasticsearchTemplate">
+		<constructor-arg name="client" ref="client" />
+	</bean>
+
+</beans>

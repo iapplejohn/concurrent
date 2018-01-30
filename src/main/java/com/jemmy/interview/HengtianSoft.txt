@@ -1,0 +1,77 @@
+1. User table, Department table, how many objects are returned when executing session.get(User.class, 2)?
+
+2. When should us use the transaction? Is it required to use it when querying data?
+   What's the effect when surround the querying with transaction? what would be locked?
+   What would be locked when inserting data?
+   
+3. What's web service? Why to use web service? How to ensure the security?
+
+4. 10000 clients will access the tomcat server, assuming you are the leader, how to design the architecture?
+
+5. What's the java packages you are familiar with?
+   How many streams are there in the java.io package? How many ways of getting data from the file?
+
+6. What's the differences between the Set and List?
+
+7. Supposing an instance of the ArrayList which contains the user, how to remove the user specified?
+   ArrayList list = new ArrayList();
+   for (Iterator iter = list.iterator(); iter.hasNext();) {
+   	User user = (User)iter.next();
+   	if ("John".equals(user.name))
+   		iter.remove();
+   }
+   
+8. Assuming there are two tables: user and attendance, how to get the statistic of the user by month?
+   How to get the user that the count of the late occurence by month?
+
+CREATE TABLE `user` (
+	`id` INT(11) NOT NULL AUTO_INCREMENT,
+	`name` VARCHAR(40) NULL DEFAULT NULL COLLATE 'latin1_swedish_ci',
+	UNIQUE INDEX `id` (`id`)
+)
+COLLATE='utf8_general_ci'
+ENGINE=InnoDB
+
+CREATE TABLE `attendance` (
+	`id` INT(11) NOT NULL AUTO_INCREMENT,
+	`user_id` INT(11) NOT NULL,
+	`attend_time` TIMESTAMP NULL DEFAULT NULL,
+	`leave_time` TIMESTAMP NULL DEFAULT NULL,
+	PRIMARY KEY (`id`)
+)
+COLLATE='utf8_general_ci'
+ENGINE=InnoDB
+
+-- Get the statistic by month
+SELECT b.name, MONTH(attend_time) AS MONTH, COUNT(1) AS COUNT
+FROM attendance a
+LEFT JOIN USER b ON a.user_id = b.id
+GROUP BY user_id, MONTH(attend_time)
+
+-- Get count of the late occurence by month
+SELECT b.name, MONTH(attend_time) AS MONTH, COUNT(1) AS COUNT
+FROM attendance a
+LEFT JOIN USER b ON a.user_id = b.id
+WHERE TIME(attend_time) >= '09:00:00'
+GROUP BY user_id, MONTH(attend_time)
+
+9. What's about index? What columns should us apply the index, what should not?
+   
+9. How to implement multi-threads? In order to improve the efficiency, multiple threads read the files
+   concurrently, how to avoid that two or more threads read a file two times?
+   
+10. What's the difference between JDK 1.5 and JDK 1.6? What's the new features in JDK 1.6?
+	a. enum (adding a keyword enum)
+	b. varying parameters (...)
+	c. generic type
+	d. autoboxing and unboxing
+	e. foreach loop
+	f. static import (unnecessary to add class name before static method)
+	g. annotation (@, to simply J2EE, it could be seen from EJB3, JPA of JavaEE5)
+http://wenku.baidu.com/view/7ec793ed4afe04a1b071de88.html
+
+11. Have you ever heard of GWC architecture? Google's product which is written in Java 	
+
+12. What're the technical aspects that you are interested in and want to demonstrate your talent and energy in?
+
+ 
